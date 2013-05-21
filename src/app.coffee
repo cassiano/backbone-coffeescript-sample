@@ -1,3 +1,5 @@
+# To compile automatically, run (from the root folder): "coffee -wc src/*.coffee"
+
 $ ->
 	App =
 		Models: {}
