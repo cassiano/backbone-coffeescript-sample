@@ -70,6 +70,7 @@ $ ->
 			item.set part2: "#{item.get 'part2'} #{@counter}"
 			@collection.add item
 			
+			# The create() method below does all the above plus an additional item.save().
 			# @collection.create part2: "#{(new App.Models.Item).get 'part2'} #{@counter}"
 			
 		appendItem: (item) ->
