@@ -20,20 +20,16 @@ $ ->
 	App.Views.ItemView = class extends Backbone.View
 		tagName: 'li'
 		
+		template: _.template $('#item-view-template').html()
+		
 		initialize: ->
 			_.bindAll @
 			
-			# @model.bind 'change', @render
-			# @model.bind 'remove', @unrender
-			@listenTo @model, 'change', @render
-			@listenTo @model, 'remove', @unrender
+			@listenTo @model, 'change', @render				# @model.on 'change', @render
+			@listenTo @model, 'remove', @unrender			# @model.on 'remove', @unrender
 		
 		render: ->
-			$(@el).html """
-				<span>#{@model.greeting()}</span>
-				<span class="swap">[Swap]</span>
-				<span class="delete">[Delete]</span>
-				"""
+			$(@el).html @template(model: @model)
 			@
 			
 		unrender: -> $(@el).remove()
@@ -49,8 +45,6 @@ $ ->
 	App.Collections.List = class extends Backbone.Collection
 		model: App.Models.Item
 
-		# localStorage: new Backbone.LocalStorage('backbone+coffeescript')
-
 	App.Views.ListView = class extends Backbone.View
 		el: $ 'body'
 		
@@ -58,15 +52,13 @@ $ ->
 			_.bindAll @
 			
 			@collection = new App.Collections.List
-			# @collection.bind 'add', @appendItem
-			@listenTo @collection, 'add', @appendItem
+			@listenTo @collection, 'add', @appendItem		# @collection.on 'add', @appendItem
 						
 			@counter = 0
 			@render()
 			
 		render: ->
-			$(@el).append '<button>Add Item</button>'
-			$(@el).append '<ul></ul>'
+			$(@el).append $('#list-view-template').html()
 			@
 			
 		addItem: ->
@@ -74,7 +66,6 @@ $ ->
 			
 			item = new App.Models.Item
 			item.set part2: "#{item.get 'part2'} #{@counter}"
-			# item.save()
 			@collection.add item
 			
 			# @collection.create part2: "#{(new App.Models.Item).get 'part2'} #{@counter}"
