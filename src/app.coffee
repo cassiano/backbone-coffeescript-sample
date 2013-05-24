@@ -11,7 +11,7 @@ $ ->
     defaults:
       part1: 'Hello'
       part2: 'Backbone'
-      index: 999
+      index: null
       
     greeting: -> "#{@get 'part1'}, #{@get 'part2'} (#{@get 'index'})!"
     
@@ -19,8 +19,10 @@ $ ->
       @set
         part1: @get 'part2'
         part2: @get 'part1'
+
+      @save()
     
-  App.Views.ItemView = class extends Backbone.View
+  class App.Views.ItemView extends Backbone.View
     tagName: 'li'
     
     template: _.template $('#item-view-template').html()
@@ -29,30 +31,31 @@ $ ->
       _.bindAll @
       
       @listenTo @model, 'change', @render
-      @listenTo @model, 'remove', @unrender
+      @listenTo @model, 'destroy', @unrender
     
     render: ->
       $(@el).html @template(model: @model)
+      # $(@el).html ecoTemplates['item-view-template.html'](model: @model)
       @
       
     unrender: -> $(@el).remove()
 
-    swap: -> 
-      @model.swap()
-      @model.save()
+    events:
+      # Event   CSS Selector  Method
+      # -----   ------------  --------
+      'click    .swap':       'swap'
+      'click    .remove':     'remove'
 
+    swap:   -> @model.swap()
     remove: -> @model.destroy()
 
-    events:
-      'click .swap': 'swap'
-      'click .delete': 'remove'
-
-  App.Collections.List = class extends Backbone.Collection
+  class App.Collections.List extends Backbone.Collection
     model: App.Models.Item
     
     localStorage: new Backbone.LocalStorage('backbone+coffeescript')
+    # url: '/items'
 
-  App.Views.ListView = class extends Backbone.View
+  class App.Views.ListView extends Backbone.View
     el: $ 'body'
     
     initialize: ->
@@ -64,7 +67,7 @@ $ ->
       @counter = 0
       @render()
 
-      @collection.fetch remove: false   # 'remove: false' assures an "add" event is sent for every new model.
+      @collection.fetch remove: false   # The 'remove: false' option assures an 'add' event is sent for every new model added.
 
     render: ->
       $(@el).append $('#list-view-template').html()
@@ -73,12 +76,11 @@ $ ->
     addItem: ->
       @counter++
       
-      # item = new App.Models.Item
-      # item.set part2: "#{item.get 'part2'} #{@counter}"
-      # @collection.add item
-      # item.save()
-
       @collection.create index: @counter
+
+      # Equivalent to:
+      # @collection.add(item = new App.Models.Item(index: @counter))
+      # item.save()
       
     appendItem: (item) ->
       item_view = new App.Views.ItemView model: item
@@ -90,8 +92,4 @@ $ ->
             
     events: 'click button': 'addItem'
 
-  # Backbone.sync = (method, model, success, error) ->
-  #   console.log "Performing action '#{method}' in #{model.greeting()}..."
-  #   success?()
-      
   App.start()

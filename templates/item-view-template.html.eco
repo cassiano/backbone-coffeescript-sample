@@ -1,0 +1,3 @@
+<span><%= @model.greeting() %></span>
+<span class="swap">[Swap!]</span>
+<span class="remove">[Delete!]</span>

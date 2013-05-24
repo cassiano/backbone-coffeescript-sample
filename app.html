@@ -1,23 +1,31 @@
 <!doctype html>
 <html>
-<head>
-  <script src="lib/jquery-2.0.0.min.js" type="text/javascript"></script>
-  <script src="lib/underscore-min.js" type="text/javascript"></script>
-  <script src="lib/backbone-min.js" type="text/javascript"></script>
-  <script src="lib/backbone.localStorage.js" type="text/javascript"></script>
-  <script src="src/app.js" type="text/javascript"></script>
+  <head>
+  </head>
+  <body>
+    <script>
+      document.write('<script src="lib/' +  ('__proto__' in {} ? 'zepto' : 'jquery-2.0.0') + '.min.js"><\/script>')
+    </script>
+  
+    <script src="lib/underscore-min.js"></script>
+    <script src="lib/backbone-min.js"></script>
+    <script src="lib/backbone.localStorage.js"></script>
+    <!--
+    <script src="lib/require-min.js"></script>
+    -->
 
-  <script type="text/template" id="list-view-template">
-    <button>Add Item#</button>
-    <ul></ul>
-  </script>
+    <script src="src/app.js"></script>
+    <script src="templates/item-view-template.html.js"></script>
 
-  <script type="text/template" id="item-view-template">
-    <span><%= model.greeting() %></span>
-    <span class="swap">[Swap]</span>
-    <span class="delete">[Delete]</span>
-  </script>
-</head>
-<body>
-</body>
+    <script type="text/template" id="list-view-template">
+      <button>Add Item#</button>
+      <ul></ul>
+    </script>
+
+    <script type="text/template" id="item-view-template">
+      <span><%= model.greeting() %></span>
+      <span class="swap">[Swap]</span>
+      <span class="remove">[Delete]</span>
+    </script>
+  </body>
 </html>
